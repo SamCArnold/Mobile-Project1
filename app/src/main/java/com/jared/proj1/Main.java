@@ -33,6 +33,8 @@ import com.jared.proj1.data.Channel;
 import com.jared.proj1.service.WeatherServiceCallback;
 import com.jared.proj1.service.YahooWeatherService;
 
+import java.util.Random;
+
 public class Main extends AppCompatActivity implements SensorEventListener {
 
     public static final String TAG = "COP4656";
@@ -61,7 +63,9 @@ public class Main extends AppCompatActivity implements SensorEventListener {
     TextView compassDisplay;
     TextView longitude;
     TextView latitude;
+    TextView heart;
     Button getCoordinates;
+    Button heartrate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,9 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         compassDisplay = (TextView) findViewById(R.id.compassDisplay);
         longitude = (TextView) findViewById(R.id.longitude);
         latitude = (TextView) findViewById(R.id.latitude);
+        heart = (TextView) findViewById(R.id.tvHeartRate);
         getCoordinates = (Button) findViewById(R.id.location);
+        heartrate = (Button) findViewById(R.id.bHeartRate);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mPressure = (mSensorManager).getDefaultSensor(Sensor.TYPE_PRESSURE);
@@ -198,6 +204,9 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         else if(sensor.getType() == Sensor.TYPE_PRESSURE){
             float[] values = event.values;
             pressure.setText("Pressure: " + Math.round(values[0]) + " Millibars");
+        }else if(sensor.getType() == Sensor.TYPE_HEART_RATE){
+            float[] values = event.values;
+            heart.setText("Heart Rate: " + values[0] + " bpm");
         }
         else{
             // for the compass
@@ -225,5 +234,19 @@ public class Main extends AppCompatActivity implements SensorEventListener {
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         //not used just needed for the sensor to compile
+    }
+
+    /* heart rate spoof*/
+    public void eventHandler(View view){
+        if (view == heartrate){
+            HeartRate();
+        }
+    }
+
+    public void HeartRate(){
+        Random rand = new Random();
+        int num;
+        num = rand.nextInt(90) + 60;
+        heart.setText("Heart Rate: " + Integer.toString(num) + " bpm");
     }
 }

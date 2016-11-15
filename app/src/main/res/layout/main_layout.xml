@@ -43,16 +43,16 @@ This is for the tab layout
         android:layout_height="wrap_content"
         android:text="Longitude: -"
         android:id="@+id/longitude"
-        android:layout_above="@+id/location"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/latitude"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Latitude: -"
         android:id="@+id/latitude"
-        android:layout_above="@+id/longitude"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -60,9 +60,8 @@ This is for the tab layout
         android:layout_height="wrap_content"
         android:text="Get Location"
         android:id="@+id/location"
-        android:layout_above="@+id/comapss"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"/>
+        android:layout_below="@+id/longitude"
+        android:layout_centerHorizontal="true"/>
 
     <ImageView
         android:layout_width="200dp"
@@ -70,34 +69,55 @@ This is for the tab layout
         android:id="@+id/comapss"
         android:src="@drawable/compass"
         android:layout_gravity="center_vertical"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/location"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp" />
+        android:layout_marginTop="26dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Direction: "
         android:id="@+id/compassDisplay"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="77dp" />
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/comapss"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Temperature: "
         android:id="@+id/temp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="36dp" />
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/compassDisplay"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pressure: "
         android:id="@+id/pressure"
+        android:layout_below="@+id/temp"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Heart Rate:"
+        android:id="@+id/tvHeartRate"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginBottom="5dp"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Heart Rate"
+        android:id="@+id/bHeartRate"
+        android:layout_above="@+id/tvHeartRate"
+        android:layout_centerHorizontal="true"
+        android:onClick="eventHandler"
+        android:textSize="15dp"/>
 
 </RelativeLayout>
