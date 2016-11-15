@@ -39,7 +39,7 @@ public class WeatherActivity implements WeatherServiceCallback {
 
         Item item = channel.getItem();
 
-        temperature.setText(item.getCondition().getTemperature()+"\u00B0 "
+        temperature.setText("Pressure: "+item.getCondition().getTemperature()+"\u00B0 "
                 +channel.getUnits().getTemperature());
 
     }

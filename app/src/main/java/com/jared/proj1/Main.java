@@ -197,13 +197,13 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         }
         else if(sensor.getType() == Sensor.TYPE_PRESSURE){
             float[] values = event.values;
-            pressure.setText("Pressure: " + values[0] + " Millibars");
+            pressure.setText("Pressure: " + Math.round(values[0]) + " Millibars");
         }
         else{
             // for the compass
             // get the angle around the z-axis rotated
-            float degree = Math.round(event.values[0]);
-            compassDisplay.setText("Direction: " + Float.toString(degree) + " degrees");
+            int degree = Math.round(event.values[0]);
+            compassDisplay.setText("Direction: " + Integer.toString(degree) + " degrees");
 
             //create a rotation animation (reverse turn degree degrees)
             RotateAnimation rot_anim = new RotateAnimation(
