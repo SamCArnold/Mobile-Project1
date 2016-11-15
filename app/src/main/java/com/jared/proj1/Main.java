@@ -29,6 +29,10 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
+import com.jared.proj1.data.Channel;
+import com.jared.proj1.service.WeatherServiceCallback;
+import com.jared.proj1.service.YahooWeatherService;
+
 public class Main extends AppCompatActivity implements SensorEventListener {
 
     public static final String TAG = "COP4656";
@@ -41,6 +45,7 @@ public class Main extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager mSensorManager;
     private Sensor mTemperature;
+    private Sensor mPressure;
 
     LocationManager mlocationManager;
     LocationListener mlocationListener;
@@ -51,6 +56,7 @@ public class Main extends AppCompatActivity implements SensorEventListener {
     ViewPager viewPager;
     */
     ImageView image;
+    TextView pressure;
     TextView temp;
     TextView compassDisplay;
     TextView longitude;
@@ -72,22 +78,39 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         */
         image = (ImageView) findViewById(R.id.comapss);
         temp = (TextView) findViewById(R.id.temp);
+        pressure = (TextView) findViewById(R.id.pressure);
         compassDisplay = (TextView) findViewById(R.id.compassDisplay);
         longitude = (TextView) findViewById(R.id.longitude);
         latitude = (TextView) findViewById(R.id.latitude);
         getCoordinates = (Button) findViewById(R.id.location);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        mPressure = (mSensorManager).getDefaultSensor(Sensor.TYPE_PRESSURE);
         mTemperature = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
         mlocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mlocationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 longitude.setText(longitudeTXT);
-                longitude.append(String.valueOf(location.getLongitude()));
+                if(location.getLongitude() > 0) {
+                    longitude.append(String.valueOf(location.getLongitude()) + " W");
+                }else if(location.getLongitude() < 0){
+                    longitude.append(String.valueOf(-1 * location.getLongitude()) + " E");
+                }else{
+                    longitude.append(String.valueOf(location.getLongitude()));
+                }
 
                 latitude.setText(latitudeTXT);
-                latitude.append(String.valueOf(location.getLatitude()));
+                if(location.getLatitude() > 0) {
+                    latitude.append(String.valueOf(location.getLatitude()) + " N");
+                }else if(location.getLatitude() < 0){
+                    latitude.append(String.valueOf(-1 * location.getLatitude()) + " S");
+                }else{
+                    latitude.append(String.valueOf(location.getLatitude()));
+                }
+
+                WeatherActivity wa = new WeatherActivity();
+                wa.WeatherTempGet(location.getLatitude(), location.getLongitude(), findViewById(android.R.id.content));
             }
             public void onStatusChanged(String provider, int status, Bundle extras) {
 
@@ -110,11 +133,14 @@ public class Main extends AppCompatActivity implements SensorEventListener {
                                                 Manifest.permission.ACCESS_FINE_LOCATION,
                                                 Manifest.permission.INTERNET},
                                     REQUEST_CODE);
+            }else{
+                configureButton();
             }
         }else {
             configureButton();
         }
     }
+
 
     @Override
     protected void onResume() {
@@ -122,6 +148,7 @@ public class Main extends AppCompatActivity implements SensorEventListener {
         // for the system's orientation sensor registered listeners
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
         mSensorManager.registerListener(this, mTemperature, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mPressure, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
@@ -161,29 +188,38 @@ public class Main extends AppCompatActivity implements SensorEventListener {
     /* These functions are for the compass and temperature sensor */
     @Override
     public void onSensorChanged(SensorEvent event) {
-    //for the temperature
-        float ambient_temp = event.values[0];
-        temp.setText("Temperature: " + String.valueOf(ambient_temp) + getResources().getString(R.string.celsius));
 
-    // for the compass
-        // get the angle around the z-axis rotated
-        float degree = Math.round(event.values[0]);
-        compassDisplay.setText("Direction: " + Float.toString(degree) + " degrees");
+        Sensor sensor = event.sensor;
+        if (sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
+            //for the temperature
+            float ambient_temp = event.values[0];
+            temp.setText("Temperature: " + String.valueOf(ambient_temp) + getResources().getString(R.string.celsius));
+        }
+        else if(sensor.getType() == Sensor.TYPE_PRESSURE){
+            float[] values = event.values;
+            pressure.setText("Pressure: " + values[0] + " Millibars");
+        }
+        else{
+            // for the compass
+            // get the angle around the z-axis rotated
+            float degree = Math.round(event.values[0]);
+            compassDisplay.setText("Direction: " + Float.toString(degree) + " degrees");
 
-        //create a rotation animation (reverse turn degree degrees)
-        RotateAnimation rot_anim = new RotateAnimation(
-                currentDegree,
-                -degree,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f);
-        // how long the animation will take place
-        rot_anim.setDuration(210);
-        // set the animation after the end of the reservation status
-        rot_anim.setFillAfter(true);
-        // Start the animation
-        image.startAnimation(rot_anim);
-        currentDegree = -degree;
+            //create a rotation animation (reverse turn degree degrees)
+            RotateAnimation rot_anim = new RotateAnimation(
+                    currentDegree,
+                    -degree,
+                    Animation.RELATIVE_TO_SELF, 0.5f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f);
+            // how long the animation will take place
+            rot_anim.setDuration(210);
+            // set the animation after the end of the reservation status
+            rot_anim.setFillAfter(true);
+            // Start the animation
+            image.startAnimation(rot_anim);
+            currentDegree = -degree;
+        }
     }
 
     @Override

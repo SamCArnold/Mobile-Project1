@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Process;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,20 +23,19 @@ public class WeatherActivity implements WeatherServiceCallback {
     private ProgressDialog mProgressDialog;
     private Activity main;
 
-    public void WeatherActivity(double latitude, double longitude, Activity activity){
-        temperature = (TextView)activity.findViewById(R.id.temp);
-        main = activity;
+    public void WeatherTempGet(double latitude, double longitude, View v){
+        temperature = (TextView)v.findViewById(R.id.temp);
 
         yService = new YahooWeatherService(this);
-        mProgressDialog = new ProgressDialog(activity);
+        /*mProgressDialog = new ProgressDialog(v);
         mProgressDialog.setMessage("Loading weather...");
-        mProgressDialog.show();
+        mProgressDialog.show();*/
         yService.refreshWeather("Tallahassee, FL");
     }
 
     @Override
     public void serviceSuccess(Channel channel) {
-        mProgressDialog.hide();
+        //mProgressDialog.hide();
 
         Item item = channel.getItem();
 
@@ -46,6 +46,6 @@ public class WeatherActivity implements WeatherServiceCallback {
 
     @Override
     public void serviceFailure(Exception exception) {
-
+        Log.e("serviceFailure", "exception", exception);
     }
 }

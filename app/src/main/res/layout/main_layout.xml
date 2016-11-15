@@ -62,7 +62,7 @@ This is for the tab layout
         android:id="@+id/location"
         android:layout_above="@+id/comapss"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp" />
+        android:layout_marginBottom="60dp"/>
 
     <ImageView
         android:layout_width="200dp"
@@ -91,5 +91,13 @@ This is for the tab layout
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="36dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pressure: "
+        android:id="@+id/pressure"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
