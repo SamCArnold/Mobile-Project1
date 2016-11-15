@@ -203,7 +203,7 @@ public class Main extends AppCompatActivity implements SensorEventListener {
             // for the compass
             // get the angle around the z-axis rotated
             int degree = Math.round(event.values[0]);
-            compassDisplay.setText("Direction: " + Integer.toString(degree) + " degrees");
+            compassDisplay.setText("Direction: " + Integer.toString(degree) + "° degrees");
 
             //create a rotation animation (reverse turn degree degrees)
             RotateAnimation rot_anim = new RotateAnimation(
